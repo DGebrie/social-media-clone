@@ -12,12 +12,12 @@ function App() {
     //   imageUrl:
     //     "https://cdn.dribbble.com/users/2289238/screenshots/9780542/kobe-bryant-rip-1.jpg",
     // },
-    // {
-    //   username: "twosmov",
-    //   caption: "You asked for my hustle, I gave you my heart. RIP24",
-    //   imageUrl:
-    //     "https://cdn.dribbble.com/users/2289238/screenshots/9780542/kobe-bryant-rip-1.jpg",
-    // },
+    {
+      username: "twosmov",
+      caption: "You asked for my hustle, I gave you my heart. RIP24",
+      imageUrl:
+        "https://cdn.dribbble.com/users/2289238/screenshots/9780542/kobe-bryant-rip-1.jpg",
+    },
   ]);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ function App() {
       const querySnapshot = await getDocs(collection(db, "/posts"));
       querySnapshot.forEach((snapshot) => {
         // console.log(`${doc.id} => ${doc.data()}`);
-        setPosts(snapshot.docs.map((doc) => doc.data()));
+        // setPosts(snapshot.docs.map((doc) => doc.data()));
       });
     };
     fetchData();
