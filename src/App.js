@@ -23,30 +23,25 @@ function App() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
+  const [openSignin, setOpenSignin] = useState("");
 
   useEffect(() => {
-    auth.onAuthStateChanged((authUser) => {
+    const unsubscribe = auth.onAuthStateChanged((authUser) => {
       if (authUser) {
         // user has logged in
         console.log(authUser);
         setUser(authUser);
-
-        if (authUser.displayName) {
-          //dont update username
-        } else {
-          // if profile just created
-          return authUser.updateProfile({
-            displayName: username,
-          });
-        }
       } else {
         // user has logged out
         setUsername(null);
       }
     });
-  }, [user, username]);
 
-  const handleLogin = () => {};
+    return () => {
+      // perform some cleanup actions
+      unsubscribe();
+    };
+  }, [user, username]);
 
   useEffect(() => {
     db.collection(`posts`).onSnapshot((snapshot) => {
@@ -59,16 +54,37 @@ function App() {
     });
   }, []);
 
-  const signUp = (event) => {
-    event.preventDefault();
+  const signUp = (e) => {
+    e.preventDefault();
 
     auth
       .createUserWithEmailAndPassword(email, password)
+      .then((authUser) => {
+        return authUser.user.updateProfile({
+          displayName: username,
+        });
+      })
       .catch((error) => alert(error.message));
+
+    setOpen(false);
+  };
+
+  const signIn = (e) => {
+    e.preventDefault();
+
+    auth
+      .signInWithEmailAndPassword(email, password)
+      .catch((error) => alert(error));
+
+    setOpenSignin(false);
   };
 
   return (
     <div className="app">
+      {/* Caption Input */}
+      {/* File picker */}
+      {/* post button */}
+
       <Modal
         open={open}
         onClose={() => setOpen(false)}
@@ -90,23 +106,62 @@ function App() {
                 placeholder="username"
                 type="text"
                 value={username}
-                onchange={(e) => setUsername(e.target.value)}
+                onChange={(e) => setUsername(e.target.value)}
               />
               <Input
                 placeholder="email"
                 type="text"
                 value={email}
-                onchange={(e) => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
               />
+
               <Input
                 placeholder="password"
                 type="password"
                 value={password}
-                onchange={(e) => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </form>
-            <Button onClick={handleLogin}>Login</Button>
-            <Button onClick={signUp}>Sign Up</Button>
+            <Button type="submit" onClick={signUp}>
+              Sign Up
+            </Button>
+          </div>
+        </Box>
+      </Modal>
+
+      <Modal
+        open={openSignin}
+        onClose={() => setOpenSignin(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <div>
+            <form className="app__signup">
+              <center>
+                <img
+                  className="app__headerImage"
+                  src="https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png"
+                  alt="instagram logo"
+                />
+              </center>
+              <Input
+                placeholder="email"
+                type="text"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+
+              <Input
+                placeholder="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </form>
+            <Button type="submit" onClick={signIn}>
+              Sign In
+            </Button>
           </div>
         </Box>
       </Modal>
@@ -119,7 +174,15 @@ function App() {
         />
       </div>
 
-      <Button onClick={() => setOpen(true)}>Sign Up</Button>
+      {user ? (
+        <Button onClick={() => auth.signOut()}>Log Out</Button>
+      ) : (
+        <div className="app__loginContainer">
+          <Button onClick={() => setOpenSignin(true)}>Sign In</Button>
+          <Button onClick={() => setOpen(true)}>Sign Up</Button>
+        </div>
+      )}
+
       <h1> INSTAGRAM CLONE</h1>
 
       {/* Posts */}
