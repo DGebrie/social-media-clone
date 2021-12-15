@@ -3,6 +3,7 @@ import "./App.css";
 import Post from "./Post";
 import { db, auth } from "./firebase";
 import { Input, Box, Button, Modal } from "@mui/material";
+import ImageUpload from "./ImageUpload";
 
 const style = {
   position: "absolute",
@@ -81,9 +82,7 @@ function App() {
 
   return (
     <div className="app">
-      {/* Caption Input */}
-      {/* File picker */}
-      {/* post button */}
+      <ImageUpload />
 
       <Modal
         open={open}
