@@ -1,22 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import Post from "./Post";
+import { db } from "./firebase";
+import { collection, getDocs } from "firebase/firestore/lite";
 
 function App() {
   const [posts, setPosts] = useState([
-    {
-      username: "twosmov",
-      caption: "You asked for my hustle, I gave you my heart. RIP24",
-      imageUrl:
-        "https://cdn.dribbble.com/users/2289238/screenshots/9780542/kobe-bryant-rip-1.jpg",
-    },
-    {
-      username: "twosmov",
-      caption: "You asked for my hustle, I gave you my heart. RIP24",
-      imageUrl:
-        "https://cdn.dribbble.com/users/2289238/screenshots/9780542/kobe-bryant-rip-1.jpg",
-    },
+    // {
+    //   username: "twosmov",
+    //   caption: "You asked for my hustle, I gave you my heart. RIP24",
+    //   imageUrl:
+    //     "https://cdn.dribbble.com/users/2289238/screenshots/9780542/kobe-bryant-rip-1.jpg",
+    // },
+    // {
+    //   username: "twosmov",
+    //   caption: "You asked for my hustle, I gave you my heart. RIP24",
+    //   imageUrl:
+    //     "https://cdn.dribbble.com/users/2289238/screenshots/9780542/kobe-bryant-rip-1.jpg",
+    // },
   ]);
+
+  useEffect(() => {
+    // db.collection("posts").onSnapshot((snapshot) => {
+    //   setPosts(snapshot.docs.map((doc) => doc.data()));
+    // });
+    const fetchData = async () => {
+      const querySnapshot = await getDocs(collection(db, "/posts"));
+      querySnapshot.forEach((snapshot) => {
+        // console.log(`${doc.id} => ${doc.data()}`);
+        setPosts(snapshot.docs.map((doc) => doc.data()));
+      });
+    };
+    fetchData();
+  }, [posts]);
 
   return (
     <div className="App">
