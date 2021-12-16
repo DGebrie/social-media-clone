@@ -75,15 +75,22 @@ function App() {
 
     auth
       .signInWithEmailAndPassword(email, password)
-      .catch((error) => alert(error));
+      .catch((error) => alert(error.message));
 
     setOpenSignin(false);
   };
 
   return (
     <div className="app">
-      <ImageUpload />
-
+      {/*  user?.displayName is returning false // displayName error */}
+      {user?.displayName ? (
+        <ImageUpload
+        // username={user.displayName}
+        />
+      ) : (
+        <h3>Login to upload.</h3>
+      )}
+      {/* {console.log(displayName)} */}
       <Modal
         open={open}
         onClose={() => setOpen(false)}
@@ -127,7 +134,6 @@ function App() {
           </div>
         </Box>
       </Modal>
-
       <Modal
         open={openSignin}
         onClose={() => setOpenSignin(false)}
@@ -172,7 +178,6 @@ function App() {
           alt="instagram logo"
         />
       </div>
-
       {user ? (
         <Button onClick={() => auth.signOut()}>Log Out</Button>
       ) : (
@@ -181,9 +186,7 @@ function App() {
           <Button onClick={() => setOpen(true)}>Sign Up</Button>
         </div>
       )}
-
       <h1> INSTAGRAM CLONE</h1>
-
       {/* Posts */}
       {posts.map(({ id, post }) => (
         <Post
