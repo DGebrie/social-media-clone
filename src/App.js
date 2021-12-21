@@ -30,7 +30,6 @@ function App() {
     const unsubscribe = auth.onAuthStateChanged((authUser) => {
       if (authUser) {
         // user has logged in
-        console.log(authUser);
         setUser(authUser);
       } else {
         // user has logged out
@@ -40,6 +39,7 @@ function App() {
 
     return () => {
       // perform some cleanup actions
+
       unsubscribe();
     };
   }, [user, username]);
@@ -83,14 +83,12 @@ function App() {
   return (
     <div className="app">
       {/*  user?.displayName is returning false // displayName error */}
-      {user?.displayName ? (
-        <ImageUpload
-        // username={user.displayName}
-        />
+      {user?.email ? (
+        <ImageUpload email={user.email} />
       ) : (
         <h3>Login to upload.</h3>
       )}
-      {/* {console.log(displayName)} */}
+
       <Modal
         open={open}
         onClose={() => setOpen(false)}
