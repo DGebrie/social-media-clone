@@ -42,6 +42,7 @@ export default function ImageUpload({ username }) {
               caption: caption,
               imageUrl: url,
               username: username,
+              name: image.name,
             });
 
             setProgress(0);
@@ -61,14 +62,18 @@ export default function ImageUpload({ username }) {
       {/* caption & progress bar input not displaying */}
       <progress value={progress} max="100"></progress>
 
-      <imput
+      <input
         type="text"
         placeholder="Enter a caption ..."
         onChange={(e) => setCaption(e.target.value)}
         value={caption}
       />
-      <input type="file" onChange={handleChange} value={image} />
-      <Button onClick={handleUpload}>Upload</Button>
+      <input type="file" onChange={handleChange} />
+      {image ? (
+        <Button onClick={handleUpload}>Upload</Button>
+      ) : (
+        <p>Please select an image</p>
+      )}
     </div>
   );
 }

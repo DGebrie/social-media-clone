@@ -24,7 +24,7 @@ function App() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
-  const [openSignin, setOpenSignin] = useState("");
+  const [openSignin, setOpenSignin] = useState(false);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((authUser) => {
@@ -33,13 +33,12 @@ function App() {
         setUser(authUser);
       } else {
         // user has logged out
-        setUsername(null);
+        setUser(null);
       }
     });
 
     return () => {
       // perform some cleanup actions
-
       unsubscribe();
     };
   }, [user, username]);
@@ -84,7 +83,7 @@ function App() {
     <div className="app">
       {/*  user?.displayName is returning false // displayName error */}
       {user?.email ? (
-        <ImageUpload email={user.email} />
+        <ImageUpload username={user.displayName} />
       ) : (
         <h3>Login to upload.</h3>
       )}
@@ -184,6 +183,7 @@ function App() {
           <Button onClick={() => setOpen(true)}>Sign Up</Button>
         </div>
       )}
+
       <h1> INSTAGRAM CLONE</h1>
       {/* Posts */}
       {posts.map(({ id, post }) => (
