@@ -43,8 +43,12 @@ function App() {
     };
   }, [user, username]);
 
+  // Cole sign in --- cole@yahoo.com jcole123
+  // Nipsey --- nip@yahoo.com nipsey
+
   useEffect(() => {
     db.collection(`posts`).onSnapshot((snapshot) => {
+      // every time a new post is added this code fires
       setPosts(
         snapshot.docs.map((doc) => ({
           id: doc.id,

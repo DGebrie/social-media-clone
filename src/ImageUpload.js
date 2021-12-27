@@ -38,7 +38,7 @@ export default function ImageUpload({ username }) {
           .then((url) => {
             // post image in database
             db.collection("posts").add({
-              timestamp: firebase.firestore.FieldValue.serverTimestamp,
+              timestamp: firebase.firestore.FieldValue.serverTimestamp(),
               caption: caption,
               imageUrl: url,
               username: username,
