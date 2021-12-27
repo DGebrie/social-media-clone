@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button } from "@mui/material";
 import { storage, db } from "./firebase";
 import firebase from "firebase/compat";
+import "./ImageUpload.css";
 
 export default function ImageUpload({ username }) {
   const [image, setImage] = useState(null);
@@ -54,13 +55,12 @@ export default function ImageUpload({ username }) {
   };
 
   return (
-    <div>
-      {/* Caption Input */}
-      {/* File picker */}
-      {/* post button */}
-
-      {/* caption & progress bar input not displaying */}
-      <progress value={progress} max="100"></progress>
+    <div className="imageupload">
+      <progress
+        className="imageupload__progress"
+        value={progress}
+        max="100"
+      ></progress>
 
       <input
         type="text"

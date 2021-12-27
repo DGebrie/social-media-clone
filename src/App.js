@@ -47,15 +47,17 @@ function App() {
   // Nipsey --- nip@yahoo.com nipsey
 
   useEffect(() => {
-    db.collection(`posts`).onSnapshot((snapshot) => {
-      // every time a new post is added this code fires
-      setPosts(
-        snapshot.docs.map((doc) => ({
-          id: doc.id,
-          post: doc.data(),
-        }))
-      );
-    });
+    db.collection(`posts`)
+      .orderBy("timestamp", "desc")
+      .onSnapshot((snapshot) => {
+        // every time a new post is added this code fires
+        setPosts(
+          snapshot.docs.map((doc) => ({
+            id: doc.id,
+            post: doc.data(),
+          }))
+        );
+      });
   }, []);
 
   const signUp = (e) => {
@@ -85,13 +87,6 @@ function App() {
 
   return (
     <div className="app">
-      {/*  user?.displayName is returning false // displayName error */}
-      {user?.email ? (
-        <ImageUpload username={user.displayName} />
-      ) : (
-        <h3>Login to upload.</h3>
-      )}
-
       <Modal
         open={open}
         onClose={() => setOpen(false)}
@@ -198,6 +193,12 @@ function App() {
           imageUrl={post.imageUrl}
         />
       ))}
+
+      {user?.displayName ? (
+        <ImageUpload username={user.displayName} />
+      ) : (
+        <h3>Login to upload.</h3>
+      )}
     </div>
   );
 }
